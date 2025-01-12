@@ -42,7 +42,30 @@ func sitesConcurrent(urls []string) {
 	wg.Wait()
 }
 
-func Main() {
+func returnTypeByChannel(url string, out chan string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		out <- fmt.Sprintf("error: %s", err)
+		return
+	}
+	defer resp.Body.Close()
+	ctype := resp.Header.Get("content-type")
+	out <- fmt.Sprintf("%s -> %s", url, ctype)
+}
+
+func sitesConcurrentUsingChannel(urls []string) {
+	ch := make(chan string)
+	for _, url := range urls {
+		go returnTypeByChannel(url, ch)
+	}
+
+	for range urls {
+		out := <-ch
+		fmt.Println(out)
+	}
+}
+
+func MainGoroutines() {
 	urls := []string{
 		"https://golang.org",
 		"https://api.github.com",
@@ -55,5 +78,9 @@ func Main() {
 
 	start = time.Now()
 	sitesConcurrent(urls)
+	fmt.Println(time.Since(start))
+
+	start = time.Now()
+	sitesConcurrentUsingChannel(urls)
 	fmt.Println(time.Since(start))
 }
