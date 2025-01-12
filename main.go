@@ -13,8 +13,6 @@ func main() {
 	fmt.Println(separator)
 	examples.MainChannels1()
 	fmt.Println(separator)
-	examples.MainChannels2()
-	fmt.Println(separator)
 	examples.MainChannels3()
 	fmt.Println(separator)
 	examples.MainSelect1()
@@ -23,4 +21,7 @@ func main() {
 	fmt.Println(separator)
 	examples.MainFindBind()
 	fmt.Println(separator)
+	examples.MainDownload()
+	fmt.Println(separator)
+	examples.MainDonwloadCurrency()
 }
